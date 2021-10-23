@@ -1,11 +1,15 @@
 Package: smolts2bugs
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Functions To Help Creation Of Datafiles For Blackbox Smoltmodel
+Version: 0.1.1
+Author: Anders Kagervall
+Maintainer: Anders Kagervall <anders.kagervall@slu.se>
+Description: Functions To Help Creation Of Datafiles For Blackbox Smoltmodel
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    R (>= 2.10)
+RoxygenNote: 7.1.2
+Imports: 
+    writexl
