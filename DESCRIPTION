@@ -4,8 +4,8 @@ Title: Functions To Help Creation Of Datafiles For Blackbox Smoltmodel
 Version: 0.1.1
 Author: Anders Kagervall
 Maintainer: Anders Kagervall <anders.kagervall@slu.se>
-Description: Functions To Help Creation Of Datafiles For Blackbox Smoltmodel
-License: What license is it under?
+Description: Functions To Help Creation Of Datafiles For Blackbox Smolt Model.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: 

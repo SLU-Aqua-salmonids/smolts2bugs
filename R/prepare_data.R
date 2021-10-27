@@ -100,7 +100,9 @@ format_Data2 <- function(fish, env, ndays, missing_days = NULL) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' gen_Inits2(3, g = g_inits_1)
+#' }
 #'
 gen_Inits2 <- function(n, llambda = .1 , lphi = 1, g) {
   res <- cbind('llambda[,1]' = rep_len(llambda, n),

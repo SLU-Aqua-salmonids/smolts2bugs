@@ -23,6 +23,8 @@ Generate a matrix suitable to save into a Inits2cX_group1.odc file. This functio
 is used by save_bugsdata() and is probably not called directly by the user.
 }
 \examples{
+\dontrun{
 gen_Inits2(3, g = g_inits_1)
+}
 
 }
