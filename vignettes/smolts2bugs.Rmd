@@ -1,0 +1,62 @@
+---
+title: "Introduction to smolts2bugs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to smolts2bugs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+## Introduction
+The model used to estimate smolt production is a Bayesian model written in the BUGS-language
+and is run in the Blackbox environment. The input for the model must be saved in a number of
+_.odc_ files. Odc files is a binary format and cannot be (easily) be written from R. The format of the input is quite hard the format correctly by hand with large matrix and column names that must be in a specific format to be recognized.
+
+To help the process _smolts2bugs_ contains functions that can format capture/recapture data and save an Excel-file where each sheet corresponds to one Blackbox input file. The Blackbox .odc files can the be created by cut-n-paste between Excel and Blackbox.
+
+## Workflow
+
+The bulk of the work is done by the function format_Data2() that will create the matrix that should go into Data2_1group.odc. Step one is to create a data.frame where each row represents one fish. The data.frame *must* contain three manatory columns _capture_day_, _recapture_day_ and _marked_. Columns _capture_day_, _recapture_day_ are the day number the fish was caught with the
+first day of the experiment is 1. Column _marked_ is a logical indicating if the fish was marked (subject for recapture) or not. The parameter _env_ is a data.frame with two mandatory columns "water_temp" and "water_level". The number of rows in _env_ must be equal to parameter _ndays_ that indicates how many days the experiment was running. The optional parameter _missing_days_ is a numerical vector of day numbers where the trap wasn't operational.
+
+Below is a small data set demonstrating an experiment with 5 fishing days where 3 fish was caught, 2 of those were marked and both marked fish were recaptured. The result is a matrix with dimensions ndays x ndays + 6.
+
+```{r setup}
+library(smolts2bugs)
+ndays <- 5
+(smolts <- data.frame(
+   capture_day = c(2,2,3),
+   recapture_day = c(NA, 3, 4),
+   marked = c(FALSE, TRUE, TRUE)))
+(envdata <- data.frame(
+   w_temp = c(7, 7, 8, 8.5, 9),
+   w_level = c(100, 110, 105, 150, 145)))
+
+result <- format_Data2(fish = smolts, env = envdata, ndays = ndays)
+result
+```
+The formated matrix should the be written to an Excel file using the function _save_bugsdata()_. This will create a file with 6 sheets _Data1_, _Data2_, _Inits1c1_, _Inits1c2_, _Inits2c1_ and _Inits2c2_. Each sheet corresponds to a Blackbox .odc file. By default the file will be saved in the current directory and be named _bugsdata.xlsx_. Existing file will be overwritten.
+
+```{r eval=FALSE}
+save_bugsdata(result)
+```
+
+You ca also save the data with R _save()_ with the function _save_Rdatadump()_, this file can later be loaded with _load()_. Besides the smolt data _save_Rdatadump()_ will save various meta data describes the experiment. The data will be saved as a list named _rdata_. By default the file will be saved in the current directory and be named _RData_dump.RData_. Existing file will be overwritten.
+
+```{r eval=FALSE}
+save_Rdatadump(result, river = "Mörrumsån", species = "Lax",
+               startd = "2020-03-15", stopd = "2020-05-20",
+               missing_days = c(7, 15:18))
+```
+
+
+

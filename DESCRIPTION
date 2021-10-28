@@ -13,3 +13,7 @@ Depends:
 RoxygenNote: 7.1.2
 Imports: 
     writexl
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
