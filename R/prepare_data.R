@@ -69,14 +69,16 @@ format_Data2 <- function(fish, env, ndays, missing_days = NULL) {
       R[i, j] <- R[i, j] + 1
     }
   }
-  # If user provided  missing days set number of catch and
-  # number of recaptures to -9 on those days.
+  # If user provided  missing days set number of catch (C) and
+  # number of recaptures (R) to -9 on those days.
   # User must replace -9 with the string "NA". If package writexl can get an
   # option to write NAs (like showNA in package xlsx) we will change this to
   # NA instead of -9.
   if (!is.null(missing_days)) {
     C[missing_days] <- -9
-    R[missing_days, missing_days] <- -9
+    for (mday in missing_days) {
+      R[mday, mday] <- -9
+    }
   }
   # Put everything together in one array with colnames in "Blackbox" format
   colnames(R) <- sprintf("r[,%d,1]", seq_len(ndays))
@@ -181,6 +183,8 @@ save_Rdatadump <- function( x, river, species, startd, stopd, missing_days = NUL
     "wl" = x[ , (ncol(x)-2)],
     "z"  = x[ , (ncol(x)-1)],
     "n"  = x[ , (ncol(x))])
+  rdata$c <- ifelse(rdata$c == -9, as.integer(NA), rdata$c)
+  rdata$r <- ifelse(rdata$r == -9, as.integer(NA), rdata$r)
   if (!file.exists(path)) {
     dir.create(path)
   }
@@ -188,3 +192,20 @@ save_Rdatadump <- function( x, river, species, startd, stopd, missing_days = NUL
   save(rdata, file = RData_dump)
 }
 
+
+#' Convert dates to day numbers
+#'
+#' A vector of dates (or data that can be coerced as dates) are converted
+#' to day number relative to start_date. E.g. if a date is equal to start_date
+#' 1 is returned.
+#'
+#' @param start_date object that can be coerced with as.Date
+#' @param date_list  vector that can be coerced with as.Date
+#'
+#' @return vector of integers
+#' @export
+#'
+#' @examples
+date_number <- function(start_date, date_list) {
+  res <-as.numeric(as.Date(date_list) - as.Date(start_date) + 1)
+  return(res)
