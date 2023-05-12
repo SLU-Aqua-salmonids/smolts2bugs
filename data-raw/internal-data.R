@@ -13,4 +13,4 @@ g_inits_2 <- c(9.5, 13, 1.07, 6, 9.8, 3.5, 4.1, 6.2, 9.5, 13, 6.2, 3.5, 4.1, 6.2
                9.5, 13, 1.07, 6, 6.2, 9.5, 13, 1.07, 6, 9.8, 3.5, 4.1, 6.2, 9.5,
                13, 6.2, 9.5, 13, 1.07, 6.2)
 
-usethis::use_data(g_inits_1, g_inits_2, internal = TRUE, overwrite = TRUE)
+usethis::use_data(g_inits_1, g_inits_2, overwrite = TRUE)
