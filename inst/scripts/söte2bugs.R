@@ -1,7 +1,7 @@
 ###
-## Script to transform a smoltdata exported from SÃ¶tebasen into formats usable
+## Script to transform a smoltdata exported from Sötebasen into formats usable
 ## as input to mark/recapture models.
-##  Time-stamp: <2023-04-26 12:50:06 ankag>
+##  Time-stamp: <2023-10-18 12:50:06 ankag>
 ##
 
 library(dplyr)
@@ -11,19 +11,20 @@ library(lubridate)
 library(Smoltreg)
 library(smolts2bugs)
 ##
-#sweet_file <- file.choose()
-sweet_file <- "c:/ExportSÃ¶tebasen/AA02_MarkRecapSmolts_Query.xlsx"
+sweet_file <- file.choose() # Get filenamew interactivly
+#sweet_file <- "c:/ExportSötebasen/AA02_MarkRecapSmolts_Query.xlsx" # Use hardcoded name
 d <- read_excel(sweet_file)
 river <- d$VattenNamn[1]
 year <- year(d$AnstrDatumStart[1])
+## Choose species here
 species <- "Lax"
-#species <- "Ã–ring"
+#species <- "Öring"
 
 RESULTDIR <- paste0("SMOLTS2_", river, "_", year)
 SPECIESDIR <- file.path(RESULTDIR, species)
 minlength <- Smoltreg_limits()$minlength
 maxlength <- Smoltreg_limits()$maxlength
-## dates <- read_excel(sweet_file, sheet = "AnstrÃ¤ngning") %>%
+## dates <- read_excel(sweet_file, sheet = "Ansträngning") %>%
 dates <- d[1, ] %>%
   mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
          start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
@@ -36,20 +37,20 @@ dates <- d[1, ] %>%
 #fish <- read_excel(sweet_file, sheet = "Individ") %>%
 fish <- d %>%
   filter(Art == species) %>%
-  filter(between(LÃ¤ngd1, minlength, maxlength) | is.na(LÃ¤ngd1)) %>%
-  mutate(day_of_year = as.POSIXlt(FÃ¥ngstDatum)$yday, pittag = MÃ¤rkeNr,
+  filter(between(Längd1, minlength, maxlength) | is.na(Längd1)) %>%
+  mutate(day_of_year = as.POSIXlt(FångstDatum)$yday, pittag = MärkeNr,
          event = case_when(Behandling == "Utsatt" ~ Smoltreg::event$CAUGHT,
-                           Behandling == "MÃ¤rkt&utsatt" ~ Smoltreg::event$MARKED,
-                           Behandling == "Ã…terfÃ¥ngad&utsatt" ~ Smoltreg::event$RECAPTURED,
-                           Behandling == "Landad/avlivad/dÃ¶d" ~ Smoltreg::event$REMOVED,
+                           Behandling == "Märkt&utsatt" ~ Smoltreg::event$MARKED,
+                           Behandling == "Återfångad&utsatt" ~ Smoltreg::event$RECAPTURED,
+                           Behandling == "Landad/avlivad/död" ~ Smoltreg::event$REMOVED,
                            TRUE ~ Smoltreg::event$UNKNOWN)) %>%
-  select(pittag, day_of_year, length = LÃ¤ngd1, event, species = Art)
+  select(pittag, day_of_year, length = Längd1, event, species = Art)
 
 if (any(fish$event == Smoltreg::event$UNKNOWN)) {
   stop("Unknown event in fish. PLEASE FIX!!")
 }
 
-#fish <- fish %>% filter(!(is.na(length) & event == CAUGHT)) # Ã…by special
+#fish <- fish %>% filter(!(is.na(length) & event == CAUGHT)) # Åby special
 ####
 ## Create a data frame "tagged" with all fish caught, marked and relased
 ## e.g. all fish in "" tagged are  subject for recapture.
@@ -69,7 +70,7 @@ recaptured <- fish %>% filter(event == Smoltreg::event$RECAPTURED) %>%
 ## subject for recapture, e.g. fish that died or was released downstream
 ## the trap.
 captured <- fish %>%
-##  filter(event == CAUGHT | event == UNKNOWN) %>%  #Special Laxens hus 2019. MÃ¤rkta i Ekeberg markerade UNKNOWN
+##  filter(event == CAUGHT | event == UNKNOWN) %>%  #Special Laxens hus 2019. Märkta i Ekeberg markerade UNKNOWN
     filter(event == Smoltreg::event$CAUGHT | event == Smoltreg::event$REMOVED) %>%
     select(pittag, day_of_year, species) %>%
     rename(capture_day = day_of_year) %>%
