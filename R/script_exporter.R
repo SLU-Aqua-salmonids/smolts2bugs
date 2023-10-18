@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-#' 2 + 2
+#' ##
 #' \dontrun{
 #' get_script("söte_import2bugs.R")
 #' }

@@ -19,17 +19,18 @@ Invisible return the value of the file.copy() operation.
 \description{
 The package have a couple of useful(?) scripts that you can use as a starting
 point to build scripts that reformat data to data suitable for the BlackBox
-bugs-model.
+bugs-model. Use `get_script()` to copy a script to your own workspace.
 }
 \details{
+Known scripts:
 \itemize{
- \item{"s\xf6te_import2bugs.R"}{read and format a file in the S\xf6tebasen import format to bugs}
- \item{"s\xf6te2bugs.R"}{read and format a file exported from S\xf6tebasen to bugs}
+ \item{"söte_import2bugs.R"}{read and format a file in the Sötebasen import format to bugs}
+ \item{"söte2bugs.R"}{read and format a file exported from Sötebasen to bugs}
 }
 }
 \examples{
-2 + 2
+##
 \dontrun{
-get_script("s\xf6te_import2bugs.R")
+get_script("söte_import2bugs.R")
 }
 }
