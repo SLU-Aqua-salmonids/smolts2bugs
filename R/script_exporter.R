@@ -6,8 +6,8 @@
 #'
 #' Known scripts:
 #' \itemize{
-#'  \item{"söte_import2bugs.R"}{read and format a file in the Sötebasen import format to bugs}
-#'  \item{"söte2bugs.R"}{read and format a file exported from Sötebasen to bugs}
+#'  \item{"söte_import2bugs.R"} {read and format a file in the Sötebasen import format to bugs}
+#'  \item{"söte2bugs.R"} {read and format a file exported from Sötebasen to bugs}
 #' }
 #'
 #' @param scriptname character Name of (known) script
@@ -19,8 +19,7 @@
 #' @export
 #'
 #' @examples
-#' ##
-#' \dontrun{
+#' if (FALSE) {
 #' get_script("söte_import2bugs.R")
 #' }
 get_script <- function(scriptname, outname = scriptname, overwrite = FALSE) {

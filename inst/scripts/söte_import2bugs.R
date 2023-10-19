@@ -1,5 +1,5 @@
 ###
-## Script to transform a Sötebasen import-file into formats usable
+## Script to transform a SÃ¶tebasen import-file into formats usable
 ## as input to mark/recapture models.
 ##  Time-stamp: <2023-10-18 12:50:06 ankag>
 ##
@@ -11,12 +11,12 @@ library(Smoltreg)
 library(smolts2bugs)
 ##
 sweet_file <- file.choose()
-#sweet_file <- "../Testeboån/2021/smoltreg_Testeboån_2021_sötebasen.xlsx"
+#sweet_file <- "../TesteboÃ¥n/2021/smoltreg_TesteboÃ¥n_2021_sÃ¶tebasen.xlsx"
 i <- read_excel(sweet_file, sheet = "Insamling")
 river <- i$Vatten
-year <- i$Årtal
+year <- i$Ã…rtal
 species <- "Lax"
-#species <- "Ã–ring"
+#species <- "ÃƒÂ–ring"
 
 RESULTDIR <- paste0("SMOLTS_", river, "_", year)
 SPECIESDIR <- file.path(RESULTDIR, species)
@@ -24,7 +24,7 @@ minlength <- Smoltreg_limits()$minlength
 maxlength <- Smoltreg_limits()$maxlength
 #minlength <- 129
 #maxlength <- 300
-dates <- read_excel(sweet_file, sheet = "Ansträngning") %>%
+dates <- read_excel(sweet_file, sheet = "AnstrÃ¤ngning") %>%
   mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
          start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
          start_date = AnstrDatumStart,
@@ -35,17 +35,17 @@ dates <- read_excel(sweet_file, sheet = "Ansträngning") %>%
 # Get all rows for a species and remove too small and too long fish
 fish <- read_excel(sweet_file, sheet = "Individ") %>%
   filter(Art == species) %>%
-  filter(between(Längd1, minlength, maxlength) | is.na(Längd1)) %>%
-  mutate(day_of_year = as.POSIXlt(FångstDatum)$yday, pittag = MärkeNr,
+  filter(between(LÃ¤ngd1, minlength, maxlength) | is.na(LÃ¤ngd1)) %>%
+  mutate(day_of_year = as.POSIXlt(FÃ¥ngstDatum)$yday, pittag = MÃ¤rkeNr,
          event = case_when(Behandling == "Utsatt" ~ Smoltreg::event$CAUGHT,
-                           Behandling == "Märkt&utsatt" ~ Smoltreg::event$MARKED,
-                           Behandling == "Återfångad&utsatt" ~ Smoltreg::event$RECAPTURED,
-                           Behandling == "Landad/avlivad/död" ~ Smoltreg::event$REMOVED,
+                           Behandling == "MÃ¤rkt&utsatt" ~ Smoltreg::event$MARKED,
+                           Behandling == "Ã…terfÃ¥ngad&utsatt" ~ Smoltreg::event$RECAPTURED,
+                           Behandling == "Landad/avlivad/dÃ¶d" ~ Smoltreg::event$REMOVED,
                            TRUE ~ Smoltreg::event$UNKNOWN)) %>%
-  select(pittag = MärkeNr, day_of_year, length = Längd1, event, species = Art)
+  select(pittag = MÃ¤rkeNr, day_of_year, length = LÃ¤ngd1, event, species = Art)
 
 
-#fish <- fish %>% filter(!(is.na(length) & event == CAUGHT)) # Ã…by special
+#fish <- fish %>% filter(!(is.na(length) & event == CAUGHT)) # ÃƒÂ…by special
 ####
 ## Create a data frame "tagged" with all fish caught, marked and relased
 ## e.g. all fish in "" tagged are  subject for recapture.
@@ -65,7 +65,7 @@ recaptured <- fish %>% filter(event == Smoltreg::event$RECAPTURED) %>%
 ## subject for recapture, e.g. fish that died or was released downstream
 ## the trap.
 captured <- fish %>%
-##  filter(event == CAUGHT | event == UNKNOWN) %>%  #Special Laxens hus 2019. Märkta i Ekeberg markerade UNKNOWN
+##  filter(event == CAUGHT | event == UNKNOWN) %>%  #Special Laxens hus 2019. MÃ¤rkta i Ekeberg markerade UNKNOWN
     filter(event == Smoltreg::event$CAUGHT | event == Smoltreg::event$REMOVED) %>%
     select(pittag, day_of_year, species) %>%
     rename(capture_day = day_of_year) %>%
@@ -81,14 +81,14 @@ all_captures <- tagged %>%
 ####
 ## Read water temp and water level.
 envdata <- read_excel(sweet_file, sheet = "Temperatur") %>%
-    mutate(dnum = as.POSIXlt(MätDatum)$yday, date = as.Date(MätDatum),
-           w_level = Vattennivå, w_temp = Tempbotten) %>%
+    mutate(dnum = as.POSIXlt(MÃ¤tDatum)$yday, date = as.Date(MÃ¤tDatum),
+           w_level = VattennivÃ¥, w_temp = Tempbotten) %>%
     select(dnum, date, w_level, w_temp) %>%
     mutate(w_level = imputeTS::na_interpolation(w_level)) %>%
     mutate(w_temp = imputeTS::na_interpolation(w_temp)) %>%
     filter(between(date, dates$start_date, dates$stop_date)) # Remove measures out
 #####
-## TODO. Set missing days. Missing dates aren't in Sötebasen (yet?).
+## TODO. Set missing days. Missing dates aren't in SÃ¶tebasen (yet?).
 ## See tab Metadata in the Smoltreg-file if we have missing dates and enter them
 ## below.
 ## Missing days should be entered as day number where dates$start_date = 1
