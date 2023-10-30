@@ -14,19 +14,21 @@ get_script(scriptname, outname = scriptname, overwrite = FALSE)
 \item{overwrite}{logical Overwrite existing file (default = FALSE)}
 }
 \value{
-Invisible return the value of the file.copy() operation.
+Invisible return the value of the file.copy() operation. As a side effect
+a script file is saved
 }
 \description{
 The package have a couple of useful(?) scripts that you can use as a starting
 point to build scripts that reformat data to data suitable for the BlackBox
-bugs-model. Use `get_script()` to copy a script to your own workspace. Test
-of workflow.
+bugs-model. Use `get_script()` to copy a script to your own workspace.
 }
 \details{
 Known scripts:
 \itemize{
- \item{"söte_import2bugs.R"} {read and format a file in the Sötebasen import format to bugs}
- \item{"söte2bugs.R"} {read and format a file exported from Sötebasen to bugs}
+ \item{"söte_import2bugs.R"} {read and format a file in the Sötebasen import format
+ (i.e. the format we submit to Sötebasen admin for import) to bugs}
+ \item{"söte2bugs.R"} {read and format a file exported from Sötebasen (i.e. a file
+ we get when we export data from Sötebasen) to bugs}
 }
 }
 \examples{

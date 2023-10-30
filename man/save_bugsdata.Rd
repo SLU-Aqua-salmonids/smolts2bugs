@@ -19,3 +19,9 @@ files needed to run the smolt model in BlackBox. The file will have 6 sheets
 named Data1, Data2, Inits1c1, Inits1c2, Inits2c1 and Inits2c2. Each sheet corresponds
 to an .odc file in BlackBox and you must cut'n'paste from one format to the other.
 }
+\examples{
+\dontrun{
+save_bugsdata(Data2)
+}
+
+}
