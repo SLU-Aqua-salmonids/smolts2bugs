@@ -16,7 +16,7 @@ i <- read_excel(sweet_file, sheet = "Insamling")
 river <- i$Vatten
 year <- i$Årtal
 species <- "Lax"
-#species <- "Ãring"
+#species <- "Öring"
 
 RESULTDIR <- paste0("SMOLTS_", river, "_", year)
 SPECIESDIR <- file.path(RESULTDIR, species)
