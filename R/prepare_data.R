@@ -126,6 +126,11 @@ gen_Inits2 <- function(n, llambda = .1 , lphi = 1, g) {
 #'
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' save_bugsdata(Data2)
+#' }
+#'
 save_bugsdata <- function(x, path = ".", fname = "bugsdata.xlsx") {
   ndays <- nrow(x)
   if (!file.exists(path)) {
