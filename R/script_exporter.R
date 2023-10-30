@@ -2,7 +2,8 @@
 #'
 #' The package have a couple of useful(?) scripts that you can use as a starting
 #' point to build scripts that reformat data to data suitable for the BlackBox
-#' bugs-model. Use `get_script()` to copy a script to your own workspace.
+#' bugs-model. Use `get_script()` to copy a script to your own workspace. Test
+#' of workflow.
 #'
 #' Known scripts:
 #' \itemize{
