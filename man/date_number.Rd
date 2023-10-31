@@ -19,3 +19,7 @@ A vector of dates (or data that can be coerced as dates) are converted
 to day number relative to start_date. E.g. if a date is equal to start_date
 1 is returned.
 }
+\examples{
+(dates <- seq.Date(Sys.Date(), length.out = 10))
+date_number(start_date = dates[1], date_list = dates)
+}

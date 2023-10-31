@@ -32,7 +32,7 @@ Known scripts:
 }
 }
 \examples{
-if (FALSE) {
+\dontrun{
 get_script("söte_import2bugs.R")
 }
 }
