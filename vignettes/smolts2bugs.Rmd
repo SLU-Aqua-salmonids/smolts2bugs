@@ -50,7 +50,7 @@ The formated matrix should the be written to an Excel file using the function _s
 save_bugsdata(result)
 ```
 
-You ca also save the data with R _save()_ with the function _save_Rdatadump()_, this file can later be loaded with _load()_. Besides the smolt data _save_Rdatadump()_ will save various meta data describes the experiment. The data will be saved as a list named _rdata_. By default the file will be saved in the current directory and be named _RData_dump.RData_. Existing file will be overwritten.
+You can also save the data with R _save()_ with the function _save_Rdatadump()_, this file can later be loaded with _load()_. Besides the smolt data _save_Rdatadump()_ will save various meta data describes the experiment. The data will be saved as a list named _rdata_. By default the file will be saved in the current directory and be named _RData_dump.RData_. Existing file will be overwritten.
 
 ```{r eval=FALSE}
 save_Rdatadump(result, river = "Mörrumsån", species = "Lax",
