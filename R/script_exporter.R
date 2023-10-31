@@ -22,7 +22,7 @@
 #' @export
 #'
 #' @examples
-#' if (FALSE) {
+#' \dontrun{
 #' get_script("söte_import2bugs.R")
 #' }
 get_script <- function(scriptname, outname = scriptname, overwrite = FALSE) {
