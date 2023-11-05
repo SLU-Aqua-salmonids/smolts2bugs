@@ -42,8 +42,11 @@ sdb <- function(...){
 #' Read smolt trapping occasion data
 #'
 #' Data with all smolt trappings defined with `AnstrTyp` = "Smoltfälla" are read
-#' form a predefined Sötebasen export file. The location of the file is predefined
+#' from a predefined Sötebasen export file. The location of the file is predefined
 #' but can be changed, see ?sdb()
+#'
+#' @param VattenNamn return data only from river = VattenNamn, optional
+#' @param Year return data only from Year, optional
 #'
 #' @return
 #' Return a data frame with columns:
@@ -56,6 +59,7 @@ sdb <- function(...){
 #'  \item{VattenNamn}{}
 #'  \item{HaroID}{}
 #'  \item{AnstrPlats}{}
+#'  \item{Year}{}
 #'  }
 #' @export
 #'
@@ -64,8 +68,114 @@ sdb <- function(...){
 #' sdb(root_folder = ".") # Use current folder instead of the predefined
 #' occasions <- sdb_read_occasions()
 #' }
-sdb_read_occasions <- function() {
+sdb_read_occasions <- function(VattenNamn = NULL, Year = NULL) {
   fp <- file.path(sdb()$root_folder, sdb()$occasions)
   res <- read.csv2(fp, fileEncoding = "latin1")
+  res <- res %>%
+    dplyr::mutate(AnstrDatumStart = as.Date(AnstrDatumStart),
+           AnstrDatumSlut = as.Date(AnstrDatumSlut),
+           Year = lubridate::year(AnstrDatumStart)
+    )
+  if (!is.null(VattenNamn)) {
+    res <- res[res$VattenNamn == VattenNamn,]
+  }
+  if (!is.null(Year)) {
+    res <- res[res$Year == Year,]
+  }
+  return(res)
+}
+
+#' Read smolt catch/recatch  data
+#'
+#' Data with all smolt catches defined with `AnstrTyp` = "Smoltfälla" are read
+#' from a predefined Sötebasen export file. The location of the file is predefined
+#' but can be changed, see ?sdb()
+#'
+#' @param Art return data only from Art = Art, optional
+#' @param VattenNamn return data only from river = VattenNamn, optional
+#' @param Year return data only from Year, optional
+#'
+#' @return
+#' Return a data frame with columns:
+#' \itemize{
+#'  \item{InsamlingID}{}
+#'  \item{AnsträngningID}{}
+#'  \item{FångstDatum}{}
+#'  \item{FångstTid}{}
+#'  \item{Art}{}
+#'  \item{Längd1}{}
+#'  \item{Vikt1}{}
+#'  \item{Behandling}{}
+#'  \item{MärkeNr}{}
+#'  \item{StadiumKod}{}
+#'  \item{AnmIndivid}{}
+#'  \item{VattenNamn}{}
+#'  \item{AnstrPlats}{}
+#'  \item{Year}{}
+#'  }
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sdb(root_folder = ".") # Use current folder instead of the predefined
+#' catch <- sdb_read_catch_recatch()
+#' }
+sdb_read_catch_recatch <- function(Art = NULL, VattenNamn = NULL, Year = NULL) {
+  fp <- file.path(sdb()$root_folder, sdb()$catch_recatch)
+  res <- read.csv2(fp, fileEncoding = "latin1")
+  res <- res %>%
+    dplyr::mutate(FångstDatum = as.Date(FångstDatum),
+                  Year = lubridate::year(FångstDatum)
+    )
+  if (!is.null(Art)) {
+    res <- res[res$Art == Art,]
+  }
+  if (!is.null(VattenNamn) | !is.null(Year)) {
+    sel_ID <- sdb_read_occasions(VattenNamn = VattenNamn, Year = Year) %>%
+      dplyr::select(InsamlingID, AnsträngningID) %>%
+      dplyr::distinct()
+    res <- dplyr::left_join(sel_ID, res, by = dplyr::join_by(InsamlingID, AnsträngningID))
+
+  }
+  return(res)
+}
+
+#' Read smolt trap environment data  data
+#'
+#' Data with all environment variables collected during trapping (`AnstrTyp` = "Smoltfälla") are read
+#' from a predefined Sötebasen export file. The location of the file is predefined
+#' but can be changed, see ?sdb()
+#'
+#' @return
+#' Return a data frame with columns:
+#' \itemize{
+#'  \item{InsamlingID}{}
+#'  \item{AnstrångningID}{}
+#'  \item{Datum}{}
+#'  \item{WT}{}
+#'  \item{WL}{}
+#'  \item{Year}{}
+#'  }
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sdb(root_folder = ".") # Use current folder instead of the predefined
+#' catch <- sdb_read_catch_recatch()
+#' }
+sdb_read_catch_envir <- function(VattenNamn = NULL, Year = NULL) {
+  fp <- file.path(sdb()$root_folder, sdb()$catch_envir)
+  res <- read.csv2(fp, fileEncoding = "latin1")
+  res <- res %>%
+    dplyr::mutate(Datum = as.Date(Datum),
+                  Year = lubridate::year(Datum)
+    )
+  if (!is.null(VattenNamn) | !is.null(Year)) {
+    sel_ID <- sdb_read_occasions(VattenNamn = VattenNamn, Year = Year) %>%
+      dplyr::select(InsamlingID, AnsträngningID) %>%
+      dplyr::distinct()
+    res <- dplyr::left_join(sel_ID, res, by = dplyr::join_by(InsamlingID, AnsträngningID))
+
+  }
   return(res)
 }
