@@ -114,3 +114,11 @@ save_Rdatadump(Data2, river = river, species = species,
                startd = dates$start_date, stopd = dates$stop_date,
                missing_days = missing_days, path = SPECIESDIR)
 
+##
+## Save an markdown file that will present the results later when the model
+## have been run.
+if (require(SmoltReports)) {
+  rmarkdown::draft(file.path(SPECIESDIR, "results.Rmd"),
+                 template = "smolt-estimates-blackbox",
+                 package = "SmoltReports", edit = FALSE)
+}
