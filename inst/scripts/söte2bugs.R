@@ -1,7 +1,6 @@
 ###
 ## Script to transform a smoltdata exported from Sötebasen into formats usable
 ## as input to mark/recapture models.
-##  Time-stamp: <2023-11-10 12:50:06 ankag>
 ##
 
 library(dplyr)
@@ -12,7 +11,7 @@ library(Smoltreg) # https://github.com/kagervall/Smoltreg.git
 library(smolts2bugs) # https://github.com/kagervall/smolts2bugs.git
 ###
 ## Choose river, year and species to process
-river <- "Mörrumsån"
+river <- "Ljungan"
 year <- year(Sys.Date())
 species <- "Lax"
 #species <- "Öring"
@@ -28,17 +27,20 @@ message(paste0("Results will be saved in folder: ", SPECIESDIR))
 minlength <- Smoltreg_limits()$minlength
 maxlength <- Smoltreg_limits()$maxlength
 
-dates <-  sdb_read_occasions(VattenNamn = river, Year = year) %>%
-  mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
-         start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
-         start_date = AnstrDatumStart,
-         stop_date = AnstrDatumSlut) %>%
-  select(N_days, start_day_of_year, start_date, stop_date)
-
-
-# Get all rows for a species and remove too small and too fish
+## Get all rows for a species
+## Create a filter to select all fish valid for this mark/recapture study.
+## Two examples are in the code below. Option one is to only use fish where
+## Längd1 is between minlength and maxlength (need to include is.na(Längd1) to get recaptures).
+## This is the variant we have used for all estimates up to 2022.
+## In 2023 in Ljungan we tried to use StadiumKod c("", "S1", "S2", "S3"). E.g.
+## all StadiumKod that are smolt or smolt-like also include recaptures.
 fish <- sdb_read_catch_recatch(Art = species, VattenNamn = river, Year = year) %>%
-  filter(between(Längd1, minlength, maxlength) | is.na(Längd1)) %>%
+  filter(between(Längd1, minlength, maxlength) | is.na(Längd1))
+#    filter(StadiumKod %in% c("S1", "S2", "S3") | Behandling == "Återfångad&utsatt")
+message("First catch: ", min(fish$FångstDatum), " Last catch: ", max(fish$FångstDatum))
+
+## Reformat, recode and keep only relevant columns
+fish <- fish %>%
   mutate(day_of_year = as.POSIXlt(FångstDatum)$yday, pittag = MärkeNr,
          event = case_when(Behandling == "Utsatt" ~ Smoltreg::event$CAUGHT,
                            Behandling == "Märkt&utsatt" ~ Smoltreg::event$MARKED,
@@ -52,6 +54,23 @@ if (any(fish$event == Smoltreg::event$UNKNOWN)) {
 }
 
 #fish <- fish %>% filter(!(is.na(length) & event == CAUGHT)) # Åby special
+
+## Read the dates (period) for this trapping. Here you have the option to
+## shorten the start and stop if we have many leading or trailing dates with
+## with zero catch.
+dates <-  sdb_read_occasions(VattenNamn = river, Year = year)
+message("AnstrDatumStart: ", min(dates$AnstrDatumStart), " AnstrDatumSlut: ", max(dates$AnstrDatumSlut))
+
+## Reformat, recode and keep only relevant columns, optionally adjust dates.
+dates <- dates %>%
+#  mutate(AnstrDatumStart = as.Date("2023-05-11"),
+#         AnstrDatumSlut = as.Date("2023-06-22")) %>% # Don't use long period of leading and trailing zero catch
+  mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
+         start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
+         start_date = AnstrDatumStart,
+         stop_date = AnstrDatumSlut) %>%
+  select(N_days, start_day_of_year, start_date, stop_date)
+
 ####
 ## Create a data frame "tagged" with all fish caught, marked and relased
 ## e.g. all fish in "" tagged are  subject for recapture.
@@ -115,7 +134,8 @@ smolts2bugs::save_Rdatadump(Data2, river = river, species = species,
 ## Save a draft of the reults.Rmd template in the output directory. When models
 ## have produced rresults knit this draft to get a report.
 if (require(SmoltReports)) {
-  rmarkdown::draft(file.path(SPECIESDIR, "results.Rmd"),
+  fname <- paste0("results_", river, "_", species, "_", year, ".Rmd")
+  rmarkdown::draft(file.path(SPECIESDIR, fname),
                    template = "smolt-estimates-blackbox",
                    package = "SmoltReports", edit = FALSE)
 }
