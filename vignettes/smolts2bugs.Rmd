@@ -19,16 +19,95 @@ knitr::opts_chunk$set(
 ## Introduction
 The model used to estimate smolt production is a Bayesian model written in the BUGS-language
 and is run in the Blackbox environment. The input for the model must be saved in a number of
-_.odc_ files. Odc files is a binary format and cannot be (easily) be written from R. The format of the input is quite hard the format correctly by hand with large matrix and column names that must be in a specific format to be recognized.
+_.odc_ files. Odc files is a binary format and cannot be (easily) be written from R. The 
+format of the input is quite hard to create correctly by hand with large matrix and column
+names that must be in a specific format to be recognized.
 
-To help the process _smolts2bugs_ contains functions that can format capture/recapture data and save an Excel-file where each sheet corresponds to one Blackbox input file. The Blackbox .odc files can the be created by cut-n-paste between Excel and Blackbox.
+To help the process _smolts2bugs_ contains functions that can format capture/recapture data
+and save an Excel-file where each sheet corresponds to one Blackbox input file. The Blackbox
+.odc files can the be created by cut-n-paste between Excel and Blackbox.
 
-## Workflow
+## How to use Sötebasen data
 
-The bulk of the work is done by the function format_Data2() that will create the matrix that should go into Data2_1group.odc. Step one is to create a data.frame where each row represents one fish. The data.frame *must* contain three manatory columns _capture_day_, _recapture_day_ and _marked_. Columns _capture_day_, _recapture_day_ are the day number the fish was caught with the
-first day of the experiment is 1. Column _marked_ is a logical indicating if the fish was marked (subject for recapture) or not. The parameter _env_ is a data.frame with two mandatory columns "water_temp" and "water_level". The number of rows in _env_ must be equal to parameter _ndays_ that indicates how many days the experiment was running. The optional parameter _missing_days_ is a numerical vector of day numbers where the trap wasn't operational.
+The prefered dataflow is to first have quality assured data in Sötebasen. The
+package Smoltreg have routines to check for errors, clean data and prepare a
+file for Sötebasen import. All data in
+Sötebasen with _AnstrTyp == "Smoltfälla"_ is regulary exported to CSV-files
+that live in \\\\storage-dh.slu.se\\restricted$\\Sötebasen\\Exporter.
 
-Below is a small data set demonstrating an experiment with 5 fishing days where 3 fish was caught, 2 of those were marked and both marked fish were recaptured. The result is a matrix with dimensions ndays x ndays + 6.
+This package (_smolts2bugs_) comes with functions to read these files and format
+mark/recapture data to an excel-file that is very close to the .ODC files that
+BlackBox needs. The package also comes with a complete script that can be used
+for the preparation of Sötebasen data to the Excelfile that can be used to
+cut-n-paste data into Blackbox.
+
+### Get the script
+To get a copy of the script run:
+```{r eval=FALSE}
+# Save a script for the Sötebasen -> BlackBox conversion
+smolts2bugs::get_script(scriptname = "söte2bugs.R")
+# see ?smolts2bugs::get_script for other options
+```
+
+The recommended workflow is to load the script i Rstudio, adjust some variables
+for your river, species and year and step through the code while checking that
+you get reasonable data on each step. There are a couple of places in the code
+where you need to make a decision on what you want to do.
+
+How to choose what fish to include?
+```{r eval=FALSE}
+fish <- sdb_read_catch_recatch(Art = species, VattenNamn = river, Year = year) %>%
+  filter(between(Längd1, minlength, maxlength) | is.na(Längd1))
+#    filter(StadiumKod %in% c("S1", "S2", "S3") | Behandling == "Återfångad&utsatt")
+```
+This code reads all fish of one species for one river and year. Historically 
+we have used the fish length to choose only fish between a min and max. But in
+2023 in Ljungan we tried to use smoltification status, assesed by field personel,
+to choose fish.
+
+How to choose start and stop date?
+In Sötebasen we get start and stop date for the trapping period but sometimes
+we have long leading and/or trailing period with zero catches. It may be useful
+to reduce the length of the period as the run time of the model seems to be very
+dependant of the number of days.
+```{r eval=FALSE}
+# Uncomment the lines in this code and change the dates to reduce the length of
+# study period.
+dates <- dates %>%
+#  mutate(AnstrDatumStart = as.Date("2023-05-11"),
+#         AnstrDatumSlut = as.Date("2023-06-22")) %>% # Don't use long period of leading and trailing zero catch
+  mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
+         start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
+         start_date = AnstrDatumStart,
+         stop_date = AnstrDatumSlut) %>%
+  select(N_days, start_day_of_year, start_date, stop_date)
+
+```
+
+The script will the assemble and format the data in BlackBox-format. Formated
+data is saved in a separate folder under your current working directory (_getwd()_).
+The script also saves RData_dump.Rdata with both data and meta data and a Rmarkdown
+file (_results_river_species_year.Rmd). The rmarkdown file can procduce a human
+readable version of the results when the moddel is run and results saved.
+
+
+## Description of _smolts2bugs::format_Data2()_?
+
+The bulk of the work is done by the function format_Data2() that will create the
+matrix that should go into Data2_1group.odc. Step one is to create a data.frame
+where each row represents one fish. The data.frame *must* contain three manatory
+columns _capture_day_, _recapture_day_ and _marked_. Columns _capture_day_,
+_recapture_day_ are the day number the fish was caught with the first day of the
+experiment is 1. Column _marked_ is a logical indicating if the fish was marked
+(subject for recapture) or not. The parameter _env_ is a data.frame with two
+mandatory columns "water_temp" and "water_level". The number of rows in _env_
+must be equal to parameter _ndays_ that indicates how many days the experiment
+was running. The optional parameter _missing_days_ is a numerical vector of day
+numbers where the trap wasn't operational.
+
+Below is a small data set demonstrating an experiment with 5 fishing days where 
+3 fish was caught, 2 of those were marked and both marked fish were recaptured.
+The result is a matrix with dimensions ndays x ndays + 6.
 
 ```{r setup}
 library(smolts2bugs)
@@ -44,19 +123,29 @@ ndays <- 5
 result <- format_Data2(fish = smolts, env = envdata, ndays = ndays)
 result
 ```
-The formated matrix should the be written to an Excel file using the function _save_bugsdata()_. This will create a file with 6 sheets _Data1_, _Data2_, _Inits1c1_, _Inits1c2_, _Inits2c1_ and _Inits2c2_. Each sheet corresponds to a Blackbox .odc file. By default the file will be saved in the current directory and be named _bugsdata.xlsx_. Existing file will be overwritten.
+The formated matrix should the be written to an Excel file using the function 
+_save_bugsdata()_. This will create a file with 6 sheets _Data1_, _Data2_,
+_Inits1c1_, _Inits1c2_, _Inits2c1_ and _Inits2c2_. Each sheet corresponds to a
+Blackbox .odc file. By default the file will be saved in the current directory
+and be named _bugsdata.xlsx_. Existing file will be overwritten.
 
 ```{r eval=FALSE}
 save_bugsdata(result)
 ```
 
-You can also save the data with R _save()_ with the function _save_Rdatadump()_, this file can later be loaded with _load()_. Besides the smolt data _save_Rdatadump()_ will save various meta data describes the experiment. The data will be saved as a list named _rdata_. By default the file will be saved in the current directory and be named _RData_dump.RData_. Existing file will be overwritten.
+You can also save the data with R _save()_ with the function _save_Rdatadump()_,
+this file can later be loaded with _load()_. Besides the smolt data
+_save_Rdatadump()_ will save various meta data describes the experiment. The
+data will be saved as a list named _rdata_. By default the file will be saved in
+the current directory and be named _RData_dump.RData_. Existing file will be
+overwritten.
 
 ```{r eval=FALSE}
 save_Rdatadump(result, river = "Mörrumsån", species = "Lax",
                startd = "2020-03-15", stopd = "2020-05-20",
                missing_days = c(7, 15:18))
 ```
+
 
 
 
