@@ -2,7 +2,7 @@
 % Please edit documentation in R/sweetbase.R
 \name{sdb}
 \alias{sdb}
-\title{Set or get limits for allowed values for some values}
+\title{Set or get values for options related to Sötebasen.}
 \usage{
 sdb(...)
 }
@@ -10,16 +10,19 @@ sdb(...)
 \item{...}{Option names to retrieve option values or \code{[key]=[value]} pairs to set options.}
 }
 \description{
-Set or get limits for allowed values for some values
+Folder and filenames used to find data exported from Sötebasen on regular
+basis. Default values points to locations on the Sölab restricted servers.
+Change needed if you want to work on private copies of the data, for example
+if you work remote without VPN.
 }
 \section{Supported options}{
 
 The following options are supported
 \itemize{
- \item{\code{root_folder}}{(\code{character};//storage-dh.slu.se/restricted$/Sötebasen/Exporter) Datafiles root }
- \item{\code{occations}}{(\code{character};SmoltfällaFångsttillfällen.csv) File with trapping occasions }
- \item{\code{catch_recatch}}{(\code{character};SmoltfällaÅterfångst.csv)  File with catch/recatch data}
- \item{\code{catch_envir}}{(\code{character};SmoltfällaTemperatur.csv) File with temp/waterlevel data}
+ \item{\code{root_folder} Datafiles root (//storage-dh.slu.se/restricted$/Sötebasen/Exporter)}
+ \item{\code{occations} File with trapping occasions (SmoltfällaFångsttillfällen.csv)}
+ \item{\code{catch_recatch} File with catch/recatch data (SmoltfällaÅterfångst.csv)}
+ \item{\code{catch_envir}  File with temp/waterlevel data (SmoltfällaTemperatur.csv)}
 }
 }
 
