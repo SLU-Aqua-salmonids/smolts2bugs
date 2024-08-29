@@ -7,7 +7,7 @@ library(dplyr)
 library(readxl)
 library(writexl)
 library(lubridate)
-library(Smoltreg) # https://github.com/kagervall/Smoltreg.git
+library(Smoltreg) # https://github.com/SLU-Aqua-diadromous/Smoltreg.git
 library(smolts2bugs) # https://github.com/kagervall/smolts2bugs.git
 ###
 ## Choose river, year and species to process
