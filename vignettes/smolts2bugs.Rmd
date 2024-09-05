@@ -45,7 +45,7 @@ cut-n-paste data into Blackbox.
 To get a copy of the script run:
 ```{r eval=FALSE}
 # Save a script for the Sötebasen -> BlackBox conversion
-smolts2bugs::get_script(scriptname = "söte2bugs.R")
+smolts2bugs::get_script(scriptname = "sote2bugs.R")
 # see ?smolts2bugs::get_script for other options
 ```
 
