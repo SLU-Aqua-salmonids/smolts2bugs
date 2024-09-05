@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_exporter.R
 \name{get_script}
 \alias{get_script}
-\title{Export a script}
+\title{Export a script that formats bugs data}
 \usage{
 get_script(scriptname, outname = scriptname, overwrite = FALSE)
 }

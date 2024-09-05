@@ -1,4 +1,4 @@
-#' Export a script
+#' Export a script that formats bugs data
 #'
 #' The package have a couple of useful(?) scripts that you can use as a starting
 #' point to build scripts that reformat data to data suitable for the BlackBox
