@@ -1,7 +1,7 @@
 Package: smolts2bugs
 Type: Package
 Title: Functions To Help Creation Of Datafiles For Blackbox Smoltmodel
-Version: 0.1.3
+Version: 0.2.3
 Author: Anders Kagervall
 Maintainer: Anders Kagervall <anders.kagervall@slu.se>
 Description: Functions To Help Creation Of Datafiles For Blackbox Smolt Model.
