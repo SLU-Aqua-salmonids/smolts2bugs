@@ -1,6 +1,7 @@
 ###
 ## Script to transform a smoltdata exported from Sötebasen into formats usable
 ## as input to mark/recapture models.
+## This file is a part of package smolts2bugs, see smolts2bugs::get_script
 ##
 
 library(dplyr)

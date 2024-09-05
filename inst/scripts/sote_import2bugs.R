@@ -1,7 +1,7 @@
 ###
 ## Script to transform a Sötebasen import-file into formats usable
 ## as input to mark/recapture models.
-##  Time-stamp: <2023-10-18 12:50:06 ankag>
+## This file is a part of package smolts2bugs, see smolts2bugs::get_script
 ##
 library(dplyr)
 library(readxl)
