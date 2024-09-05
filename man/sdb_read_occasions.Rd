@@ -2,7 +2,7 @@
 % Please edit documentation in R/sweetbase.R
 \name{sdb_read_occasions}
 \alias{sdb_read_occasions}
-\title{Read smolt trapping occasion data}
+\title{Read smolt trapping occasion data from Sötebasen export}
 \usage{
 sdb_read_occasions(VattenNamn = NULL, Year = NULL)
 }

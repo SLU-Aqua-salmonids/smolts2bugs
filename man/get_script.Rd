@@ -25,14 +25,14 @@ bugs-model. Use `get_script()` to copy a script to your own workspace.
 \details{
 Known scripts:
 \itemize{
- \item{"söte_import2bugs.R"} {read and format a file in the Sötebasen import format
+ \item{"sote_import2bugs.R"} {read and format a file in the Sötebasen import format
  (i.e. the format we submit to Sötebasen admin for import) to bugs}
- \item{"söte2bugs.R"} {read and format a file exported from Sötebasen (i.e. a file
+ \item{"sote2bugs.R"} {read and format a file exported from Sötebasen (i.e. a file
  we get when we export data from Sötebasen) to bugs}
 }
 }
 \examples{
 \dontrun{
-get_script("söte_import2bugs.R")
+get_script("sote_import2bugs.R")
 }
 }

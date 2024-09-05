@@ -44,7 +44,7 @@ sdb <- function(...){
 
 ## Data readers ##############################################################################################
 
-#' Read smolt trapping occasion data
+#' Read smolt trapping occasion data from Sötebasen export
 #'
 #' Data with all smolt trappings defined with `AnstrTyp` = "Smoltfälla" are read
 #' from a predefined Sötebasen export file. The location of the file is predefined
@@ -90,7 +90,7 @@ sdb_read_occasions <- function(VattenNamn = NULL, Year = NULL) {
   return(res)
 }
 
-#' Read smolt catch/recatch  data
+#' Read smolt catch/recatch data from Sötebasen export
 #'
 #' Data with all smolt catches defined with `AnstrTyp` = "Smoltfälla" are read
 #' from a predefined Sötebasen export file. The location of the file is predefined
@@ -145,7 +145,7 @@ sdb_read_catch_recatch <- function(Art = NULL, VattenNamn = NULL, Year = NULL) {
   return(res)
 }
 
-#' Read smolt trap environment data  data
+#' Read smolt trap environment data from Sötebasen export
 #'
 #' Data with all environment variables collected during trapping (`AnstrTyp` = "Smoltfälla") are read
 #' from a predefined Sötebasen export file. The location of the file is predefined

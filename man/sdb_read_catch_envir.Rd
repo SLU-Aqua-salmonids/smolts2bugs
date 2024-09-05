@@ -2,7 +2,7 @@
 % Please edit documentation in R/sweetbase.R
 \name{sdb_read_catch_envir}
 \alias{sdb_read_catch_envir}
-\title{Read smolt trap environment data  data}
+\title{Read smolt trap environment data from Sötebasen export}
 \usage{
 sdb_read_catch_envir(VattenNamn = NULL, Year = NULL)
 }

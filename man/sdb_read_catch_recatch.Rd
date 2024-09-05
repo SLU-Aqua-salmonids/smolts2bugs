@@ -2,7 +2,7 @@
 % Please edit documentation in R/sweetbase.R
 \name{sdb_read_catch_recatch}
 \alias{sdb_read_catch_recatch}
-\title{Read smolt catch/recatch  data}
+\title{Read smolt catch/recatch data from Sötebasen export}
 \usage{
 sdb_read_catch_recatch(Art = NULL, VattenNamn = NULL, Year = NULL)
 }
