@@ -211,7 +211,7 @@ save_Rdatadump <- function( x, river, species, startd, stopd, missing_days = NUL
 #' @export
 #'
 #' @examples
-#' (dates <- seq.Date(Sys.Date(), length.out = 10))
+#' (dates <- seq.Date(Sys.Date(), by = 1, length.out = 10))
 #' date_number(start_date = dates[1], date_list = dates)
 date_number <- function(start_date, date_list) {
   res <-as.numeric(as.Date(date_list) - as.Date(start_date) + 1)
