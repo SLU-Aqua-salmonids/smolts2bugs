@@ -1,4 +1,4 @@
-Format mark/recapture data to a format suitable for the bayesian model (Mäntyniem & Romakkaniemi, 2002)
+Format mark/recapture data to a format suitable for the bayesian model in BlackBox (Mäntyniem & Romakkaniemi, 2002)
 
 Included in the package are scripts that read and format data using functions in the package. Get a copy
 of the scripts with _smolts2bugs::get_script(scriptname)_ (see ?smolts2bugs::get_script)
