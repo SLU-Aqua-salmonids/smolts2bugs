@@ -4,12 +4,17 @@
 ## This file is a part of package smolts2bugs, see smolts2bugs::get_script
 ##
 
+## TODO:
+## The two scripts sote2bugs.R and sote_import2bugs.R share a lot of coded and
+## should be merged to one script where different input methods can be choosen.
+##
+
 library(dplyr)
 library(readxl)
 library(writexl)
 library(lubridate)
 library(Smoltreg) # https://github.com/SLU-Aqua-diadromous/Smoltreg.git
-library(smolts2bugs) # https://github.com/kagervall/smolts2bugs.git
+library(smolts2bugs) # https://github.com/SLU-Aqua-diadromous/smolts2bugs.git
 ###
 ## Choose river, year and species to process
 river <- "Ljungan"
