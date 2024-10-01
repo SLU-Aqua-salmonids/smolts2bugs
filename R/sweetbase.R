@@ -82,10 +82,12 @@ sdb_read_occasions <- function(VattenNamn = NULL, Year = NULL) {
            Year = lubridate::year(AnstrDatumStart)
     )
   if (!is.null(VattenNamn)) {
-    res <- res[res$VattenNamn == VattenNamn,]
+    vn <- VattenNamn
+    res <- res %>% filter(VattenNamn %in% vn)
   }
   if (!is.null(Year)) {
-    res <- res[res$Year == Year,]
+    y <- Year
+    res <- res %>% filter(Year %in% y)
   }
   return(res)
 }
