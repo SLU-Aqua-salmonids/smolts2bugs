@@ -69,8 +69,8 @@ message("AnstrDatumStart: ", min(dates$AnstrDatumStart), " AnstrDatumSlut: ", ma
 
 ## Reformat, recode and keep only relevant columns, optionally adjust dates.
 dates <- dates %>%
-#  mutate(AnstrDatumStart = as.Date("2023-05-11"),
-#         AnstrDatumSlut = as.Date("2023-06-22")) %>% # Don't use long period of leading and trailing zero catch
+#  mutate(AnstrDatumStart = as.Date("2023-05-11")) %>%
+#  mutate(AnstrDatumSlut = as.Date("2023-06-22")) %>% # Don't use long period of leading and trailing zero catch
   mutate(N_days = 1 + as.numeric(AnstrDatumSlut - AnstrDatumStart),
          start_day_of_year = as.POSIXlt(AnstrDatumStart)$yday,
          start_date = AnstrDatumStart,
