@@ -1,0 +1,21 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/smolts2bugs.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/date_number.html</loc></url>
+<url><loc>/reference/format_Data2.html</loc></url>
+<url><loc>/reference/gen_Inits2.html</loc></url>
+<url><loc>/reference/get_script.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/save_Rdatadump.html</loc></url>
+<url><loc>/reference/save_bugsdata.html</loc></url>
+<url><loc>/reference/sdb.html</loc></url>
+<url><loc>/reference/sdb_read_catch_envir.html</loc></url>
+<url><loc>/reference/sdb_read_catch_recatch.html</loc></url>
+<url><loc>/reference/sdb_read_occasions.html</loc></url>
+<url><loc>/reference/smolts2bugs-package.html</loc></url>
+</urlset>
+
