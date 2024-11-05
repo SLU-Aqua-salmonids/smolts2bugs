@@ -21,3 +21,4 @@ Suggests:
     rmarkdown,
     knitr
 VignetteBuilder: knitr
+URL: https://slu-aqua-diadromous.github.io/smolt2bugs/
