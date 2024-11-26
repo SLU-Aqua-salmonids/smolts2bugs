@@ -35,5 +35,8 @@ get_script <- function(scriptname, outname = scriptname, overwrite = FALSE) {
     res <- file.copy(
       system.file("scripts", scriptname, package="smolts2bugs"),
       outname, overwrite = overwrite)
+    if (!res) {
+      warning("Script NOT saved (already exists?)")
+    }
   invisible(res)
 }
