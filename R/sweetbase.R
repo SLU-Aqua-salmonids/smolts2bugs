@@ -74,20 +74,20 @@ sdb <- function(...){
 #' occasions <- sdb_read_occasions()
 #' }
 sdb_read_occasions <- function(VattenNamn = NULL, Year = NULL) {
-  fp <- file.path(sdb()$root_folder, sdb()$occasions)
-  res <- read.csv2(fp, fileEncoding = "latin1")
+  fp <- base::file.path(sdb()$root_folder, sdb()$occasions)
+  res <- utils::read.csv2(fp, fileEncoding = "latin1")
   res <- res %>%
-    dplyr::mutate(AnstrDatumStart = as.Date(AnstrDatumStart),
-           AnstrDatumSlut = as.Date(AnstrDatumSlut),
+    dplyr::mutate(AnstrDatumStart = base::as.Date(AnstrDatumStart),
+           AnstrDatumSlut = base::as.Date(AnstrDatumSlut),
            Year = lubridate::year(AnstrDatumStart)
     )
-  if (!is.null(VattenNamn)) {
+  if (!base::is.null(VattenNamn)) {
     vn <- VattenNamn
-    res <- res %>% filter(VattenNamn %in% vn)
+    res <- res %>% dplyr::filter(VattenNamn %in% vn)
   }
-  if (!is.null(Year)) {
+  if (!base::is.null(Year)) {
     y <- Year
-    res <- res %>% filter(Year %in% y)
+    res <- res %>% dplyr::filter(Year %in% y)
   }
   return(res)
 }
@@ -128,16 +128,16 @@ sdb_read_occasions <- function(VattenNamn = NULL, Year = NULL) {
 #' catch <- sdb_read_catch_recatch()
 #' }
 sdb_read_catch_recatch <- function(Art = NULL, VattenNamn = NULL, Year = NULL) {
-  fp <- file.path(sdb()$root_folder, sdb()$catch_recatch)
-  res <- read.csv2(fp, fileEncoding = "latin1")
+  fp <- base::file.path(sdb()$root_folder, sdb()$catch_recatch)
+  res <- utils::read.csv2(fp, fileEncoding = "latin1")
   res <- res %>%
-    dplyr::mutate(FångstDatum = as.Date(FångstDatum),
+    dplyr::mutate(FångstDatum = base::as.Date(FångstDatum),
                   Year = lubridate::year(FångstDatum)
     )
-  if (!is.null(Art)) {
+  if (!base::is.null(Art)) {
     res <- res[res$Art == Art,]
   }
-  if (!is.null(VattenNamn) | !is.null(Year)) {
+  if (!base::is.null(VattenNamn) | !base::is.null(Year)) {
     sel_ID <- sdb_read_occasions(VattenNamn = VattenNamn, Year = Year) %>%
       dplyr::select(InsamlingID, AnsträngningID) %>%
       dplyr::distinct()
@@ -153,11 +153,14 @@ sdb_read_catch_recatch <- function(Art = NULL, VattenNamn = NULL, Year = NULL) {
 #' from a predefined Sötebasen export file. The location of the file is predefined
 #' but can be changed, see ?sdb()
 #'
+#' @param VattenNamn return data only from river = VattenNamn, optional
+#' @param Year return data only from Year, optional
+
 #' @return
 #' Return a data frame with columns:
 #' \itemize{
 #'  \item{InsamlingID}{}
-#'  \item{AnstrångningID}{}
+#'  \item{AnsträngningID}{}
 #'  \item{Datum}{}
 #'  \item{WT}{}
 #'  \item{WL}{}
@@ -171,13 +174,13 @@ sdb_read_catch_recatch <- function(Art = NULL, VattenNamn = NULL, Year = NULL) {
 #' catch <- sdb_read_catch_recatch()
 #' }
 sdb_read_catch_envir <- function(VattenNamn = NULL, Year = NULL) {
-  fp <- file.path(sdb()$root_folder, sdb()$catch_envir)
-  res <- read.csv2(fp, fileEncoding = "latin1")
+  fp <- base::file.path(sdb()$root_folder, sdb()$catch_envir)
+  res <- utils::read.csv2(fp, fileEncoding = "latin1")
   res <- res %>%
     dplyr::mutate(Datum = as.Date(Datum),
                   Year = lubridate::year(Datum)
     )
-  if (!is.null(VattenNamn) | !is.null(Year)) {
+  if (!base::is.null(VattenNamn) | !base::is.null(Year)) {
     sel_ID <- sdb_read_occasions(VattenNamn = VattenNamn, Year = Year) %>%
       dplyr::select(InsamlingID, AnsträngningID) %>%
       dplyr::distinct()

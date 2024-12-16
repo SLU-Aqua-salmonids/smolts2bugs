@@ -8,4 +8,11 @@
 \description{
 Functions To Help Creation Of Datafiles For Blackbox Smolt Model.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://slu-aqua-diadromous.github.io/smolt2bugs/}
+}
+
+}
 \keyword{internal}

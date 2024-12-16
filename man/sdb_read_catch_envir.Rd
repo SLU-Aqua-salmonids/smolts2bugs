@@ -6,11 +6,16 @@
 \usage{
 sdb_read_catch_envir(VattenNamn = NULL, Year = NULL)
 }
+\arguments{
+\item{VattenNamn}{return data only from river = VattenNamn, optional}
+
+\item{Year}{return data only from Year, optional}
+}
 \value{
 Return a data frame with columns:
 \itemize{
  \item{InsamlingID}{}
- \item{AnstrångningID}{}
+ \item{AnsträngningID}{}
  \item{Datum}{}
  \item{WT}{}
  \item{WL}{}
